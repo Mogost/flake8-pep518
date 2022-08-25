@@ -1,0 +1,28 @@
+{
+    "name": "Flake8 PEP518 Devcontainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "..",
+        "args": {
+            "VARIANT": "3.7-bullseye"
+        }
+    },
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.venvPath": "${workspaceFolder}/.venv"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "matangover.mypy",
+                "njpwerner.autodocstring",
+                "ryanluker.vscode-coverage-gutters"
+            ]
+        }
+    },
+    "postCreateCommand": "pdm install -d -G :all && pdm run pre-commit install",
+    "remoteUser": "vscode"
+}

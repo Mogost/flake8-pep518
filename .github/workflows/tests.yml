@@ -1,0 +1,54 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11.0-rc.1"
+
+    steps:
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-pdm-${{ hashFiles('pdm.lock') }}
+
+      - name: Install dependencies
+        run: pdm install --no-lock -G :all
+
+      - name: Run tests
+        run: pdm run pytest tests/ -vv --color=yes --disable-warnings --cov-report=xml --cov=flake8_pep518
+
+      - name: Upload code coverage
+        if: matrix.python-version == '3.7'
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: unittests

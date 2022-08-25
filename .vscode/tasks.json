@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Check coverage",
+            "type": "shell",
+            "command": "pdm",
+            "args": [
+                "run",
+                "pytest",
+                "-vv",
+                "--disable-warnings",
+                "--cov-report=xml",
+                "--cov=flake8_pep518",
+            ],
+            "group": "test",
+        }
+    ]
+}

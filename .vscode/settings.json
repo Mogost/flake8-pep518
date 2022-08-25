@@ -6,6 +6,8 @@
         ".coverage": true,
         "coverage.xml": true,
         ".mypy_cache": true,
+        ".hypothesis": true,
+        ".venv": true,
     },
     // Testing
     "python.testing.pytestEnabled": true,
